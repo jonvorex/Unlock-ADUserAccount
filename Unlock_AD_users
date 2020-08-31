@@ -1,0 +1,16 @@
+$dcs=Get-ADDomainController -Filter * | Select-Object name
+ 
+#User to unlock
+$user = read-host "enter the user to unlock"
+ 
+#foreach loop to unlock the specified user across all Domain Controllers
+foreach ($dc in $dcs.Name) {
+	#Try to unlock the user account if it fails use Catch to write something else
+	Try {	
+			Unlock-ADAccount $user -Server $dc
+			write-host "$($user) unlocked on $($dc)"
+		}
+	
+	Catch{write-host "Error Connecting to Server $($dc)."}
+}
+Read-Host -Prompt "Press Enter to exit"
